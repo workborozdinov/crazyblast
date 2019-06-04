@@ -11,8 +11,14 @@ export class LoadScene extends Phaser.Scene{
 
     }
     preload(){
-        this.load.image('tiles', 'dist/assets/tiles.png')
+        this.load.image('leftbutton', 'dist/assets/anonLeft.png')
+        this.load.image('rightbutton', 'dist/assets/anonRight.png')
 
+        this.load.spritesheet('tiles', 'dist/assets/tiles.png', {
+            frameHeight: CST.confField.gemHeight,
+            frameWidth: CST.confField.gemWidth, 
+        })
+        
         //create loading bar
         const loadingBar = this.add.graphics({
             fillStyle: {
@@ -22,16 +28,14 @@ export class LoadScene extends Phaser.Scene{
 
         //simulate load
         for (let i=0; i < 100; i++){
-            this.load.image('tiles'+i, 'dist/assets/tiles.png')
+            this.load.image('leftbutton'+i, 'dist/assets/anonLeft.png')
         }
 
         this.load.on("progress", (percent) =>{
             loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50)
-            console.log(percent)
         })
 
         this.load.on('complete', ()=>{
-            console.log('done')
             this.scene.start(CST.SCENES.GAME, 'hello from load')    
         })
     }
