@@ -6,4 +6,14 @@ export class GameScene extends Phaser.Scene{
             key: CST.SCENES.GAME
         })
     }
+    init(data){
+        console.log(data)
+        console.log("I GOT IT")
+    }
+    preload(){
+
+    }
+    create(){
+
+    }
 }

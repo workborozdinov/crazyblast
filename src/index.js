@@ -1,18 +1,14 @@
+import {LoadScene} from './scenes/LoadScene';
+import {GameScene} from './scenes/GameScene';
+
 const config = {
     type: Phaser.AUTO,
     width: 877,
     height: 620,
     backgroundColor: "#a1a1a1",
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 200 }
-        }
-    },
-    scene: {
-        preload: preload,
-        create: create
-    }
+    scene: [
+        LoadScene, GameScene
+    ]
 };
 
 const game = new Phaser.Game(config);
