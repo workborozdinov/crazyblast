@@ -16,7 +16,7 @@ export class LoadScene extends Phaser.Scene{
         //create loading bar
         const loadingBar = this.add.graphics({
             fillStyle: {
-                color: 0xffffff
+                color: 0xdd0066
             }
         })
 
@@ -27,10 +27,15 @@ export class LoadScene extends Phaser.Scene{
 
         this.load.on("progress", (percent) =>{
             loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50)
-            console.log(percent);
+            console.log(percent)
+        })
+
+        this.load.on('complete', ()=>{
+            console.log('done')
+            this.scene.start(CST.SCENES.GAME, 'hello from load')    
         })
     }
     create(){
-        this.scene.start(CST.SCENES.GAME, 'hello from load')
+        // this.scene.start(CST.SCENES.GAME, 'hello from load')
     }
 }

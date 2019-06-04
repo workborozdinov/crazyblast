@@ -11,9 +11,10 @@ export class GameScene extends Phaser.Scene{
         console.log("I GOT IT")
     }
     preload(){
-
+        console.log(this.game)
+        // this.game.stage.backgroundColor = "#A1A1A1";
     }
     create(){
-
+        
     }
 }
