@@ -7,8 +7,12 @@ export const CST = {
         gemHeight: 49,
         gemWidth: 42.8,
         boardOffset: {
-            x: 33,
-            y: 109
+            x: (49),
+            y: (117)  
+        },
+        sizeField: {
+            x: 385.2,
+            y: 441
         },
         destroySpeed: 200,
         fallSpeed: 100,
