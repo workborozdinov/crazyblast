@@ -7,3 +7,8 @@ Instruction to run:
 WARNING!!!
 
     There are bugs, not critical
+
+Criteria which adhered to when developing
+
+    Fast, faster, even faster
+    Not a bug, but a feature
