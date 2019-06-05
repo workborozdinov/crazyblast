@@ -1,3 +1,6 @@
+import {LoadScene} from './scenes/LoadScene';
+import {GameScene} from './scenes/GameScene';
+
 export const CST = {
     SCENES: {
         LOAD: "LOAD",
@@ -14,9 +17,18 @@ export const CST = {
             x: 385.2,
             y: 441
         },
-        destroySpeed: 200,
+        destroySpeed: 100,
         fallSpeed: 100,
         slideSpeed: 300,
-        localStorageName: "gameField"
+        localStorageName: "samegame"
+    },
+    gameConf: {
+        type: Phaser.AUTO,
+        width: 877,
+        height: 620,
+        backgroundColor: "#a1a1a1",
+        scene: [
+            LoadScene, GameScene
+        ]
     }
 }
