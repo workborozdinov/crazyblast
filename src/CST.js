@@ -17,10 +17,12 @@ export const CST = {
             x: 385.2,
             y: 441
         },
-        destroySpeed: 100,
+        destroySpeed: 60,
         fallSpeed: 100,
-        slideSpeed: 300,
-        localStorageName: "samegame"
+        slideSpeed: 500,
+        Necessary: 500,
+        MoveNum: 24
+        // localStorageName: "samegame"
     },
     gameConf: {
         type: Phaser.AUTO,

@@ -15,8 +15,19 @@ export class GameScene extends Phaser.Scene{
     create(){
         this.add.image(534,572, 'leftbutton').setOrigin(0)
         this.add.image(696,572, 'rightbutton').setOrigin(0)
+
+        const moves = this.add.image(0, 0, 'moves').setOrigin(0)
         const bg = this.add.image(-12, -12, 'background').setOrigin(0)
-        
+
+        //container for field
+        const hitArea = new Phaser.Geom.Rectangle(0, 0, CST.confField.sizeField.x, CST.confField.sizeField.y)
+        const containField = this.add.container(CST.confField.boardOffset.x, CST.confField.boardOffset.y)
+        containField.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains).on("pointerdown", this.tileSelect, this);
+
+        //container for Score/Necessary/Moves
+        const containScore = this.add.container(545, 117)
+        containScore.add(moves)
+
         this.gameField = new gameField({
             row: 9,
             columns: 9,
@@ -24,23 +35,22 @@ export class GameScene extends Phaser.Scene{
             fallingDown: false
         })
 
-        //container for field
-        const hitArea = new Phaser.Geom.Rectangle(0, 0, CST.confField.sizeField.x, CST.confField.sizeField.y)
-        let contain = this.add.container(CST.confField.boardOffset.x, CST.confField.boardOffset.y)
-        contain.setInteractive(hitArea, Phaser.Geom.Rectangle.Contains).on("pointerdown", this.tileSelect, this);
-        
-        contain.add(bg)
+        containField.add(bg)
 
         this.score = 0
         this.gameField.generateBoard()
-        this.drawField(contain)
-        this.canPick = true;
-        this.scoreText = this.add.bitmapText(20, 20, "font", "ccc", 30);
-        this.scoreNecessary = this.add.bitmapText(20, 60, "font", "Necessary: 500", 30);
+        this.drawField(containField)
+        // this.canPick = true;
+        this.scoreText = this.add.bitmapText(20, 20, 'font', 'ccc', 30);
+        this.scoreNecessary = this.add.bitmapText(20, 60, 'font', 'Necessary: ' + CST.confField.Necessary, 30);
+        this.scoreMoves = this.add.bitmapText(97, 10, 'font', 'Moves', 20);
+        this.scoreMovesNum = this.add.bitmapText(110, 140, 'font', CST.confField.MoveNum, 40)
+        containScore.add(this.scoreMoves)
+        containScore.add(this.scoreMovesNum)
         this.updateScore();
-        this.savedData = localStorage.getItem(CST.confField.localStorageName) == null ? {
-            score: 0
-        } : JSON.parse(localStorage.getItem(CST.confField.localStorageName));
+        // this.savedData = localStorage.getItem(CST.confField.localStorageName) == null ? {
+        //     score: 0
+        // } : JSON.parse(localStorage.getItem(CST.confField.localStorageName));
         // let bestScoreText = this.add.bitmapText(CST.gameConf.width - 20, 20, "font", "Best score: " + this.savedData.score.toString(), 60);
         // bestScoreText.setOrigin(1, 0);
         // this.gameText = this.add.bitmapText(CST.gameConf.width / 2, CST.gameConf.height - 60, "font", "SAMEGAME", 90)
@@ -51,7 +61,14 @@ export class GameScene extends Phaser.Scene{
     
     
     updateScore(){
-        this.scoreText.text = "Score: " + this.score.toString();
+        this.scoreText.setText("Score: " + this.score.toString())
+    }
+
+    updateMoves(){
+        this.scoreMovesNum.setText(this.scoreMovesNum.text - 1)
+        if(this.scoreMovesNum.text < 10){
+            this.scoreMovesNum.setX(130)
+        }
     }
     
     drawField(contain){
@@ -68,8 +85,7 @@ export class GameScene extends Phaser.Scene{
     }
 
     tileSelect(pointer){
-        if(this.canPick){
-            console.log(12121)
+        // if(this.canPick){
             let row = Math.floor((pointer.y - CST.confField.boardOffset.y) / CST.confField.gemHeight);
             let col = Math.floor((pointer.x - CST.confField.boardOffset.x) / CST.confField.gemWidth);
             if(this.gameField.validPick(row, col) && !this.gameField.isEmpty(row, col)){
@@ -77,7 +93,8 @@ export class GameScene extends Phaser.Scene{
                 if(connectedItems > 1){
                     this.score += (connectedItems * (connectedItems - 1));
                     this.updateScore();
-                    this.canPick = false;
+                    this.updateMoves();
+                    // this.canPick = false;
                     let gemsToRemove = this.gameField.listConnectedItems(row, col);
                     let destroyed = 0;
                     gemsToRemove.forEach(function(gem){
@@ -99,7 +116,7 @@ export class GameScene extends Phaser.Scene{
                     }.bind(this))
                 }
             }
-        }
+        // }
     }
 
     makeGemsFall(){
@@ -114,7 +131,7 @@ export class GameScene extends Phaser.Scene{
                 this.tweens.add({
                     targets: this.gameField.getCustomDataAt(movement.row, movement.column),
                     y: this.gameField.getCustomDataAt(movement.row, movement.column).y + CST.confField.gemHeight * movement.deltaRow,
-                    duration: CST.confField.destroySpeed * Math.abs(movement.deltaRow),
+                    duration: CST.confField.fallSpeed * Math.abs(movement.deltaRow),
                     callbackScope: this,
                     onComplete: function(){
                         fallingGems --;
@@ -152,27 +169,33 @@ export class GameScene extends Phaser.Scene{
         }
     }
     endOfMove(){
-        if(this.gameField.stillPlayable(2)){
-            this.canPick = true;
+        // console.log(this.scoreNecessary.text.replace(/\D+/g, ""))
+        if ((parseInt(this.scoreMovesNum.text)>0)&&(CST.confField.Necessary<this.score)){
+            console.log("nice")
+        } else if (parseInt(this.scoreMovesNum.text)==0) {
+            console.log("fail")
         }
-        else{
-            let bestScore = Math.max(this.score, this.savedData.score);
-            localStorage.setItem(CST.confField.localStorageName,JSON.stringify({
-                score: bestScore
-          	}));
-            let timedEvent =  this.time.addEvent({
-                delay: 7000,
-                callbackScope: this,
-                callback: function(){
-                    this.scene.start("PlayGame");
-                }
-            });
-            if(this.gameField.nonEmptyItems() == 0){
-                this.gameText.text = "Congratulations!!";
-            }
-            else{
-                this.gameText.text = "No more moves!!!";
-            }
-        }
+        // if(this.gameField.stillPlayable(2)){
+        //     this.canPick = true;
+        // }
+        // else{    
+            // let bestScore = Math.max(this.score, this.savedData.score);
+            // localStorage.setItem(CST.confField.localStorageName,JSON.stringify({
+            //     score: bestScore
+          	// }));
+            // let timedEvent =  this.time.addEvent({
+            //     delay: 7000,
+            //     callbackScope: this,
+            //     callback: function(){
+            //         this.scene.start("PlayGame");
+            //     }
+            // });
+            // if(this.gameField.nonEmptyItems() == 0){
+            //     this.gameText.text = "Congratulations!!";
+            // }
+            // else{
+            //     this.gameText.text = "No more moves!!!";
+            // }
+        // }
     }
 }
