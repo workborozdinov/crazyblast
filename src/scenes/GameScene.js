@@ -178,11 +178,9 @@ export class GameScene extends Phaser.Scene{
     }
     endOfMove(){
         this.addGems(this.containField)
-        if ((parseInt(this.scoreMovesNum.text)>0)&&(CST.confField.Necessary<this.score)){
-            this.add.bitmapText(CST.gameConf.width/2, CST.gameConf.height/2, 'font', 'CONGRATULATION', 30).setOrigin(0.5, 0.5);
+        if ((parseInt(this.scoreMovesNum.text)>=0)&&(CST.confField.Necessary<this.score)){
             this.scene.start(CST.SCENES.WIN)
-        } else if (parseInt(this.scoreMovesNum.text)==0) {
-            this.add.bitmapText(CST.gameConf.width/2, CST.gameConf.height/2, 'font', 'OOOOPPPS, Fail', 30).setOrigin(0.5, 0.5);
+        } else if ((parseInt(this.scoreMovesNum.text)==0)&&(CST.confField.Necessary>this.score)) {
             this.scene.start(CST.SCENES.FAIL)
         }
     }

@@ -1,6 +1,7 @@
 import {CST} from "../CST";
 import { GameScene } from "./GameScene";
 
+
 export class LoadScene extends Phaser.Scene{
     constructor(){
         super({
@@ -13,12 +14,12 @@ export class LoadScene extends Phaser.Scene{
     preload(){
         this.load.image('background', 'dist/assets/bg.png')
         this.load.image('moves', 'dist/assets/moves.png')
-        this.load.bitmapFont("font", "dist/fonts/font.png", "dist/fonts/font.fnt");
+        this.load.bitmapFont("font", "dist/assets/font.png", "dist/assets/font.fnt");
 
         this.load.spritesheet('tiles', 'dist/assets/tiles.png', {
             frameHeight: CST.confField.gemHeight,
-            frameWidth: CST.confField.gemWidth, 
-        })
+            frameWidth: CST.confField.gemWidth,
+        },)
         
         //create loading bar
         const loadingBar = this.add.graphics({
@@ -29,7 +30,7 @@ export class LoadScene extends Phaser.Scene{
 
         //simulate load
         for (let i=0; i < 100; i++){
-            this.load.image('leftbutton'+i, 'dist/assets/anonLeft.png')
+            this.load.image('moves', 'dist/assets/moves.png')
         }
 
         this.load.on("progress", (percent) =>{
@@ -41,6 +42,6 @@ export class LoadScene extends Phaser.Scene{
         })
     }
     create(){
-        // this.scene.start(CST.SCENES.GAME, 'hello from load')
+
     }
 }
