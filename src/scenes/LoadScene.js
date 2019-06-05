@@ -11,8 +11,6 @@ export class LoadScene extends Phaser.Scene{
 
     }
     preload(){
-        this.load.image('leftbutton', 'dist/assets/anonLeft.png')
-        this.load.image('rightbutton', 'dist/assets/anonRight.png')
         this.load.image('background', 'dist/assets/bg.png')
         this.load.image('moves', 'dist/assets/moves.png')
         this.load.bitmapFont("font", "dist/fonts/font.png", "dist/fonts/font.fnt");

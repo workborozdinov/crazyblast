@@ -15,8 +15,6 @@ export class GameScene extends Phaser.Scene{
     }
 
     create(){
-        this.add.image(534,572, 'leftbutton').setOrigin(0)
-        this.add.image(696,572, 'rightbutton').setOrigin(0)
 
         const moves = this.add.image(0, 0, 'moves').setOrigin(0)
         const bg = this.add.image(-12, -12, 'background').setOrigin(0)
